@@ -6,7 +6,6 @@ import numpy as np
 import pyobjcryst
 import matplotlib.pyplot as pt
 from matplotlib.ticker import MaxNLocator
-from scipy.stats import chisquare
 from scipy.optimize import least_squares
 
 from molmod.units import *
