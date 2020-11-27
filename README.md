@@ -5,12 +5,12 @@ Python wrapper for PXRD pattern calculation based on pyobjcryst. There are four 
 * fit a background profile - `background`
 * average PXRD pattern over the course of a trajectory (.h5) - `average`
 
-Each of these modes can be called using the main script, for which a specific `--help` has been implemented.
+Each of these modes can be called using the main script, for which a specific `--help` has been implemented. <br>
 Usage:
 
 `gpxrd.py mode [<options>]`
   
-Warning: the `average` mode is deprecated in favor of the included gpxrd_average.sh script, as the current backend suffers from some kind of memory error.
+Warning: the `average` mode is deprecated in favor of the included gpxrd_average.sh script, as the current backend suffers from some kind of memory error. <br>
 Usage:
 
 `gpxrd_average.sh file.h5 no_snapshots`
