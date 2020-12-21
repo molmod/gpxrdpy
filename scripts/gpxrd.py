@@ -5,7 +5,7 @@ from optparse import OptionParser
 import numpy as np
 
 from molmod.units import *
-from gpxrd.gpxrd_utils import *
+from gpxrdpy.gpxrd_utils import *
 
 
 if __name__ == "__main__":
