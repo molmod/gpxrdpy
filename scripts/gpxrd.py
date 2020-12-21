@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys,h5py,os,glob
 from optparse import OptionParser
 import numpy as np
