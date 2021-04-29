@@ -227,8 +227,9 @@ if __name__ == "__main__":
 
         # Calculate patterns
         ttheta, iobs, icalc, warning, fttheta, ficalc = calculate_pattern(crystal, wavelength, peakwidth, obspattern, check_peaks)
-        ficalc = ficalc * iobs.max()/icalc.max()
-        icalc = icalc * iobs.max()/icalc.max()
+        # Do not scale the patterns, only scale the fully averaged one
+        #ficalc = ficalc * iobs.max()/icalc.max()
+        #icalc = icalc * iobs.max()/icalc.max()
         sp_output(ttheta,icalc,idx,warning,fttheta,ficalc)
 
     # post mode
