@@ -39,6 +39,9 @@ if __name__ == "__main__":
                   action="store", type="str", dest="plot", help="plot the data (to file if specified) [default: %default]", default='False')
         parser.add_option("--check_peaks",
                   action="store_false", dest="check_peaks", help="check whether there are significant peaks outside the obspattern range [default: %default]", default=True)
+        parser.add_option("--detail",
+                  action="store_true", dest="detail", help="print detailed Fhkl info per hkl [default: %default]", default=False)
+
         (options, args) = parser.parse_args(sys.argv[2:])
 
         # Process the arguments
@@ -59,10 +62,11 @@ if __name__ == "__main__":
         obspattern  = options.obspattern
         plot        = options.plot
         check_peaks = options.check_peaks
+        detail      = options.detail
 
         # Calculate the PXRD pattern and save the output
         crystal = create_crystal(filename)
-        calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks)
+        calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail)
 
 
     # Comp mode

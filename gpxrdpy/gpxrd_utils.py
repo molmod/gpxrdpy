@@ -394,7 +394,7 @@ def background(pattern, peakwidth, bkg_points, locs, bkg_range, uniform, plot):
             f.write("{:4.3f}\t{:10.8f}\n".format(ttheta[i]/deg,no_bg[i]))
 
 
-def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks):
+def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail):
     data = pyobjcryst.powderpattern.PowderPattern()
 
     # Basic argument check
@@ -424,7 +424,7 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
     scalefactor = FitScaleFactorForRw(t1,t2,scalefactor)
 
     # Output data
-    output_data(data,filename)
+    output_data(data,filename, detail)
 
     ttheta = data.GetPowderPatternX()
     iobs = data.GetPowderPatternObs()
@@ -451,7 +451,7 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
     plot_data(ttheta,icalc,iobs,plot,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
 
 
-def output_data(data, filename):
+def output_data(data, filename, detail):
     #Export data - calculated reflections
     output_name = filename.split('.')[0]
     calc = data.GetPowderPatternComponent(0)
@@ -459,6 +459,10 @@ def output_data(data, filename):
     stdout_fd = sys.stdout.fileno()
     with open(output_name + '_fhkl.dat', 'w') as f, stdout_redirected(f):
         calc.PrintFhklCalc()
+
+    if detail:
+        with open(output_name + '_fhkl_detail.dat', 'w') as f, stdout_redirected(f):
+            calc.PrintFhklCalcDetail()
 
     # Export data - 2theta space
     ttheta = data.GetPowderPatternX()
