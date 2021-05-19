@@ -187,7 +187,9 @@ def statistical_comparison(x,p1,p2,warning=False):
     print("Similarity index \t | {:10.9f} | {:10.9f} | {:10.9f}".format(similarity_index(p1,p2),similarity_index(low_p1,low_p2),similarity_index(high_p1,high_p2)))
 
 
-def plot_data(ttheta,p1,p2,label1='calc',label2='observed',vlines=None,delta=False,warning=False,full_data=None):
+def plot_data(ttheta,p1,p2,plot,label1='calc',label2='observed',vlines=None,delta=False,warning=False,full_data=None):
+    if plot=='False':
+        return
 
     fig = pt.figure()
     ax1 = pt.gca()
@@ -353,8 +355,7 @@ def compare(pattern1, pattern2, plot, scale=True, warning=None, full_data=None):
     if full_data is not None:
         full_data[:,0] *= deg
 
-    if plot!='False':
-        plot_data(ttheta1,p1,p2,label1='pattern1',label2='pattern2', delta=False, warning=warning,full_data=full_data)
+    plot_data(ttheta1,p1,p2,plot,label1='pattern1',label2='pattern2', delta=False, warning=warning,full_data=full_data)
 
 
 def background(pattern, peakwidth, bkg_points, locs, bkg_range, uniform, plot):
@@ -396,8 +397,7 @@ def background(pattern, peakwidth, bkg_points, locs, bkg_range, uniform, plot):
     no_bg = data.GetPowderPatternObs()-data.GetPowderPatternCalc()
     no_bg -= np.min(no_bg)
 
-    if plot!='False':
-        plot_data(ttheta,data.GetPowderPatternCalc(),data.GetPowderPatternObs(),label1='background',label2='observed',vlines=bx,delta=True)
+    plot_data(ttheta,data.GetPowderPatternCalc(),data.GetPowderPatternObs(),plot,label1='background',label2='observed',vlines=bx,delta=True)
 
     with open('exp_no_bg.tsv','w') as f:
         for i in range(len(ttheta)):
@@ -446,8 +446,7 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
 
     if obspattern is  None:
         # Plot data
-        if plot!='False':
-            plot_data(ttheta,icalc,None)
+        plot_data(ttheta,icalc,plot,None)
     else:
         # Check whether the largest peak of omitted 2theta range is at least as large as the largest peak of the observed 2theta range divided by PEAK_FACTOR
         warning=False
@@ -467,8 +466,7 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
         statistical_comparison(ttheta,icalc,iobs,warning=warning)
 
         # Plot data
-        if plot!='False':
-            plot_data(ttheta,icalc,iobs,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
+        plot_data(ttheta,icalc,iobs,plot,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
 
 
 
