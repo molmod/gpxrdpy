@@ -187,58 +187,65 @@ def statistical_comparison(x,p1,p2,warning=False):
     print("Similarity index \t | {:10.9f} | {:10.9f} | {:10.9f}".format(similarity_index(p1,p2),similarity_index(low_p1,low_p2),similarity_index(high_p1,high_p2)))
 
 
-def plot_data(ttheta,p1,p2,plot,label1='calc',label2='observed',vlines=None,delta=False,warning=False,full_data=None):
-    if vlines is None:
-        p1 -= np.min(p1)
-    p2 -= np.min(p2)
+def plot_data(ttheta,p1,p2,label1='calc',label2='observed',vlines=None,delta=False,warning=False,full_data=None):
 
-    height = p2.max()-p2.min()
+    fig = pt.figure()
+    ax1 = pt.gca()
 
-    diff = p2-p1
-
-    if plot=='False':
-        return
+    if p2 is None:
+        # No reference pattern
+        ax1.plot(ttheta/deg,p1,lw=1)
     else:
-        fig = pt.figure()
-        ax1 = pt.gca()
+        # If we are doing a background analysis do not remove anything from p1
+        if vlines is None:
+            p1 -= np.min(p1)
+        p2 -= np.min(p2)
+
+        # Consider the difference for the delta plot
+        height = p2.max()-p2.min()
+        diff = p2-p1
+
+        # Plot both patterns
         ax1.plot(ttheta/deg,p2,lw=1,label=label2)
         ax1.plot(ttheta/deg,p1,lw=1,label=label1)
         if delta:
             ax1.plot(ttheta/deg,diff-height*0.1,lw=1,label=r'$\Delta$')
-        ax1.set_xlabel('2θ (°)')
-        ax1.set_ylabel('Intensity (a.u.)')
 
-        if warning:
-            ax1.set_title('WARNING: the calculated pattern has significant peaks outside the shown range!')
-            if all([data is not None for data in full_data]):
-                ax1.plot(full_data[:,0]/deg, full_data[:,1],lw=1,color='gray',alpha=0.5)
 
-        ax1.tick_params(
-            axis='y',          # changes apply to the y-axis
-            which='both',      # both major and minor ticks are affected
-            left=False,      # ticks along the left edge are off
-            right=False,         # ticks along the right edge are off
-            labelleft=False) # labels along the left edge are off
+    ax1.set_xlabel('2θ (°)')
+    ax1.set_ylabel('Intensity (a.u.)')
 
-        ax1.legend(bbox_to_anchor=(1.1,.5), loc='center left',frameon=False)
-        ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
+    if warning:
+        ax1.set_title('WARNING: the calculated pattern has significant peaks outside the shown range!')
+        if all([data is not None for data in full_data]):
+            ax1.plot(full_data[:,0]/deg, full_data[:,1],lw=1,color='gray',alpha=0.5)
 
-        lims = pt.xlim()
-        ax1.hlines(0,lims[0],lims[1],lw=0.1)
-        #ax1.hlines(-height*0.1,lims[0],lims[1],lw=0.1)
-        ax1.set_xlim(lims)
+    ax1.tick_params(
+        axis='y',          # changes apply to the y-axis
+        which='both',      # both major and minor ticks are affected
+        left=False,      # ticks along the left edge are off
+        right=False,         # ticks along the right edge are off
+        labelleft=False) # labels along the left edge are off
 
-        lims = pt.ylim()
-        if vlines is not None:
-            ax1.vlines(vlines/deg,lims[0],lims[1],lw=0.1)
+    ax1.legend(bbox_to_anchor=(1.1,.5), loc='center left',frameon=False)
+    ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-        if plot.lower() in ['true','yes','y']:
-            fig.tight_layout()
-            pt.show()
-        else:
-            path = os.path.splitext(plot)[0] # remove extension
-            pt.savefig(path+'.pdf',bbox_inches='tight')
-        pt.close()
+    lims = pt.xlim()
+    ax1.hlines(0,lims[0],lims[1],lw=0.1)
+    #ax1.hlines(-height*0.1,lims[0],lims[1],lw=0.1)
+    ax1.set_xlim(lims)
+
+    lims = pt.ylim()
+    if vlines is not None:
+        ax1.vlines(vlines/deg,lims[0],lims[1],lw=0.1)
+
+    if plot.lower() in ['true','yes','y']:
+        fig.tight_layout()
+        pt.show()
+    else:
+        path = os.path.splitext(plot)[0] # remove extension
+        pt.savefig(path+'.pdf',bbox_inches='tight')
+    pt.close()
 
 ##########################################
 # Actual functions that are executed by main code
@@ -345,7 +352,9 @@ def compare(pattern1, pattern2, plot, scale=True, warning=None, full_data=None):
     # Plot data
     if full_data is not None:
         full_data[:,0] *= deg
-    plot_data(ttheta1,p1,p2,plot,label1='pattern1',label2='pattern2', delta=False, warning=warning,full_data=full_data)
+
+    if plot:
+        plot_data(ttheta1,p1,p2,label1='pattern1',label2='pattern2', delta=False, warning=warning,full_data=full_data)
 
 
 def background(pattern, peakwidth, bkg_points, locs, bkg_range, uniform, plot):
@@ -387,7 +396,8 @@ def background(pattern, peakwidth, bkg_points, locs, bkg_range, uniform, plot):
     no_bg = data.GetPowderPatternObs()-data.GetPowderPatternCalc()
     no_bg -= np.min(no_bg)
 
-    plot_data(ttheta,data.GetPowderPatternCalc(),data.GetPowderPatternObs(),plot,label1='background',label2='observed',vlines=bx,delta=True)
+    if plot:
+        plot_data(ttheta,data.GetPowderPatternCalc(),data.GetPowderPatternObs(),label1='background',label2='observed',vlines=bx,delta=True)
 
     with open('exp_no_bg.tsv','w') as f:
         for i in range(len(ttheta)):
@@ -436,7 +446,8 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
 
     if obspattern is  None:
         # Plot data
-        plot_data(ttheta,icalc,None,plot)
+        if plot:
+            plot_data(ttheta,icalc,None)
     else:
         # Check whether the largest peak of omitted 2theta range is at least as large as the largest peak of the observed 2theta range divided by PEAK_FACTOR
         warning=False
@@ -456,7 +467,8 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
         statistical_comparison(ttheta,icalc,iobs,warning=warning)
 
         # Plot data
-        plot_data(ttheta,icalc,iobs,plot,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
+        if plot:
+            plot_data(ttheta,icalc,iobs,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
 
 
 
