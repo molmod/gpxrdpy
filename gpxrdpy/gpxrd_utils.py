@@ -444,9 +444,9 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
     iobs = data.GetPowderPatternObs()
     icalc = data.GetPowderPatternCalc()*scalefactor
 
-    if obspattern is  None:
+    if obspattern is None:
         # Plot data
-        plot_data(ttheta,icalc,plot,None)
+        plot_data(ttheta,icalc,None,plot)
     else:
         # Check whether the largest peak of omitted 2theta range is at least as large as the largest peak of the observed 2theta range divided by PEAK_FACTOR
         warning=False
