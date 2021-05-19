@@ -418,10 +418,14 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
     data.Prepare() # prepare for calcs, generate hkl space
 
     # Calculate initial scale factor
-    t1 = data.GetPowderPatternCalc()
-    t2 = data.GetPowderPatternObs()
-    scalefactor = t2.max()/t1.max()
-    scalefactor = FitScaleFactorForRw(t1,t2,scalefactor)
+    if obspattern is not None:
+        t1 = data.GetPowderPatternCalc()
+        t2 = data.GetPowderPatternObs()
+        scalefactor = t2.max()/t1.max()
+        scalefactor = FitScaleFactorForRw(t1,t2,scalefactor)
+    else:
+        # don't scale data is there is no obspattern
+        scale_factor = 1
 
     # Output data
     output_data(data,filename, detail)
@@ -430,25 +434,30 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
     iobs = data.GetPowderPatternObs()
     icalc = data.GetPowderPatternCalc()*scalefactor
 
-    # Check whether the largest peak of omitted 2theta range is at least as large as the largest peak of the observed 2theta range divided by PEAK_FACTOR
-    warning=False
-    full_ttheta,full_t1 = None,None
-    if check_peaks and obspattern is not None:
-        PEAK_FACTOR = 3 # This is arbitrary,
-        step = np.round((ttheta[1]-ttheta[0])/deg,3)
-        full_ttheta = np.arange(0, max(ttheta/deg)+step, step)*deg
-        data.SetPowderPatternX(full_ttheta)
-        data.Prepare() # prepare for calcs, generate hkl space
-        full_t1 = data.GetPowderPatternCalc()*scalefactor
-        if max(full_t1[full_ttheta<min(ttheta)]) > max(icalc)/PEAK_FACTOR:
-            warnings.warn("There is a significant diffraction peak in the omitted 2theta range! Statistical comparison can give biased results.", UserWarning)
-            warning=True
+    if obspattern is  None:
+        # Plot data
+        plot_data(ttheta,icalc,None,plot)
+    else:
+        # Check whether the largest peak of omitted 2theta range is at least as large as the largest peak of the observed 2theta range divided by PEAK_FACTOR
+        warning=False
+        full_ttheta,full_t1 = None,None
+        if check_peaks:
+            PEAK_FACTOR = 3 # This is arbitrary,
+            step = np.round((ttheta[1]-ttheta[0])/deg,3)
+            full_ttheta = np.arange(0, max(ttheta/deg)+step, step)*deg
+            data.SetPowderPatternX(full_ttheta)
+            data.Prepare() # prepare for calcs, generate hkl space
+            full_t1 = data.GetPowderPatternCalc()*scalefactor
+            if max(full_t1[full_ttheta<min(ttheta)]) > max(icalc)/PEAK_FACTOR:
+                warnings.warn("There is a significant diffraction peak in the omitted 2theta range! Statistical comparison can give biased results.", UserWarning)
+                warning=True
 
-    # Compare data
-    statistical_comparison(ttheta,icalc,iobs,warning=warning)
+        # Compare data - only sensical if there is a reference pattern
+        statistical_comparison(ttheta,icalc,iobs,warning=warning)
 
-    # Plot data
-    plot_data(ttheta,icalc,iobs,plot,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
+        # Plot data
+        plot_data(ttheta,icalc,iobs,plot,warning=warning,full_data=np.array([full_ttheta,full_t1]).T)
+
 
 
 def output_data(data, filename, detail):
