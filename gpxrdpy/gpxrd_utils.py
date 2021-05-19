@@ -425,7 +425,7 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
         scalefactor = FitScaleFactorForRw(t1,t2,scalefactor)
     else:
         # don't scale data is there is no obspattern
-        scale_factor = 1
+        scalefactor = 1
 
     # Output data
     output_data(data,filename, detail)
