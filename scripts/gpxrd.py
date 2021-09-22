@@ -77,7 +77,9 @@ if __name__ == "__main__":
         parser.add_option("--plot",
                   action="store", type="str", dest="plot", help="plot the data (to file if specified) [default: %default]", default='False')
         parser.add_option("--no_scale",
-                  action="store_false", dest="scale", help="do not scale the patterns [default: %default]", default=True)
+                  action="store_false", dest="scale", help="set this flag if you don't want to scale the patterns", default=True)
+        parser.add_option("--scale_max",
+                  action="store_true", dest="scale_max", help="set this flag if you want want a fixed max intensity", default=False)
 
         (options, args) = parser.parse_args(sys.argv[2:])
 
@@ -86,9 +88,10 @@ if __name__ == "__main__":
         obspattern, calcpattern = args
         plot  = options.plot
         scale = options.scale
+        scale_max = options.scale_max
 
         # Compare the two patterns and save the output
-        compare(obspattern, calcpattern, plot, scale=scale)
+        compare(obspattern, calcpattern, plot, scale=scale, scale_max=scale_max)
 
     # average mode
     if sys.argv[1]=="average":

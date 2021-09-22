@@ -312,7 +312,7 @@ def calculate_patterns(crystals, wavelength, peakwidth, pattern, check_peaks):
 
     return ttheta,p,patterns
 
-def compare(pattern1, pattern2, plot, scale=True, warning=None, full_data=None):
+def compare(pattern1, pattern2, plot, scale=True, scale_max=False, warning=None, full_data=None):
     data = pyobjcryst.powderpattern.PowderPattern()
     ind = 0
 
@@ -334,12 +334,13 @@ def compare(pattern1, pattern2, plot, scale=True, warning=None, full_data=None):
     p2 = data.GetPowderPatternObs()
 
     # Calculate scale factor (p2 is reference)
-    if scale:
+    if scale or scale_max:
         scalefactor = p2.max()/p1.max()
-        scalefactor = FitScaleFactorForRw(p1,p2,scalefactor)
-        p1 = p1 *scalefactor
+        if scale:
+            scalefactor = FitScaleFactorForRw(p1,p2,scalefactor)
+        p1 = p1 * scalefactor
         if full_data is not None:
-            full_data[:,1] *= scalefactor
+
 
     # Check if xranges are equal
     try:
