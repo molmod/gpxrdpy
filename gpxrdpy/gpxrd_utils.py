@@ -334,14 +334,13 @@ def compare(pattern1, pattern2, plot, scale=True, scale_max=False, warning=None,
     p2 = data.GetPowderPatternObs()
 
     # Calculate scale factor (p2 is reference)
-    if scale or scale_max:
+    if scale:
         scalefactor = p2.max()/p1.max()
-        if scale:
+        if not scale_max:
             scalefactor = FitScaleFactorForRw(p1,p2,scalefactor)
         p1 = p1 * scalefactor
         if full_data is not None:
             full_data[:,1] *= scalefactor
-
 
     # Check if xranges are equal
     try:
