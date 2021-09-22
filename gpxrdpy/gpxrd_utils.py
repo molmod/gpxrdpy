@@ -340,6 +340,7 @@ def compare(pattern1, pattern2, plot, scale=True, scale_max=False, warning=None,
             scalefactor = FitScaleFactorForRw(p1,p2,scalefactor)
         p1 = p1 * scalefactor
         if full_data is not None:
+            full_data[:,1] *= scalefactor
 
 
     # Check if xranges are equal
