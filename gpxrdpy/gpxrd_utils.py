@@ -279,7 +279,7 @@ def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks):
         data.SetPowderPatternX(full_ttheta)
         data.Prepare() # prepare for calcs, generate hkl space
         full_t1 = data.GetPowderPatternCalc()
-        if max(full_t1[full_ttheta<min(ttheta)]) > max(icalc)/PEAK_FACTOR:
+        if np.any(full_ttheta<min(ttheta)) and max(full_t1[full_ttheta<min(ttheta)]) > max(icalc)/PEAK_FACTOR:
             warnings.warn("There is a significant diffraction peak in the omitted 2theta range! Statistical comparison can give biased results.", UserWarning)
             warning=True
 
