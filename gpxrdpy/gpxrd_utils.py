@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import sys,os,copy,warnings
+import sys,os,copy,warnings,bisect
 import numpy as np
 import pyobjcryst
 import matplotlib.pyplot as pt
@@ -249,19 +249,47 @@ def plot_data(ttheta,p1,p2,plot,label1='calc',label2='observed',vlines=None,delt
         pt.savefig(path+'.pdf',bbox_inches='tight')
     pt.close()
 
-def make_commensurable(ttheta_ref,p_ref, ttheta,p):
-    ttheta_commensurate = np.zeros_like(ttheta_ref)
-    p_commensurate = np.zeros_like(p_ref)
+def make_commensurable(ttheta1,p1,ttheta2,p2,minimum,maximum,step):
+    # Create new arrays
+    trange = np.arange(minimum,maximum+step,step)
+    ttheta1_commensurate = np.zeros_like(trange)
+    ttheta2_commensurate = np.zeros_like(trange)
+    p1_commensurate = np.zeros_like(trange)
+    p2_commensurate = np.zeros_like(trange)
 
-    for n,t in enumerate(ttheta_ref):
-        index = np.argmin(np.abs(ttheta-t))
-        ttheta_commensurate[n] = ttheta[index]
-        p_commensurate[n] = p[index]
+    for n,t in enumerate(trange):
+        index1 = np.argmin(np.abs(ttheta1-t))
+        index2 = np.argmin(np.abs(ttheta2-t))
 
-    if not np.allclose(ttheta_ref,ttheta_commensurate):
-        warnings.warn('Tried to make the two theta ranges commensurate, but they still differ!')
+        ttheta1_commensurate[n] = ttheta1[index1]
+        ttheta2_commensurate[n] = ttheta2[index2]
 
-    return ttheta_commensurate,p_commensurate
+        p1_commensurate[n] = p1[index1]
+        p2_commensurate[n] = p2[index2]
+
+
+    if not np.allclose(ttheta1_commensurate,ttheta2_commensurate):
+        warnings.warn('Tried to make the two theta ranges commensurate, but they still differ! Interpolating values')
+
+        for n,t in enumerate(trange):
+            # find surrounding indices
+            idx1_right = bisect.bisect_left(ttheta1,t)
+            idx2_right = bisect.bisect_left(ttheta2,t)
+
+            ttheta1_commensurate[n] = t
+            ttheta2_commensurate[n] = t
+
+
+            # do linear interpolation
+            p1_interp = np.interp(t,ttheta1[np.clip(idx1_right-1,a_min=0,a_max=None):np.clip(idx1_right+1,a_min=None,a_max=len(ttheta1))],
+                                         p1[np.clip(idx1_right-1,a_min=0,a_max=None):np.clip(idx1_right+1,a_min=None,a_max=len(ttheta1))])
+            p2_interp = np.interp(t,ttheta2[np.clip(idx2_right-1,a_min=0,a_max=None):np.clip(idx2_right+1,a_min=None,a_max=len(ttheta2))],
+                                         p2[np.clip(idx2_right-1,a_min=0,a_max=None):np.clip(idx2_right+1,a_min=None,a_max=len(ttheta2))])
+            p1_commensurate[n] = p1_interp
+            p2_commensurate[n] = p2_interp
+
+
+    return ttheta1_commensurate,p1_commensurate,ttheta2_commensurate,p2_commensurate,
 
 ##########################################
 # Actual functions that are executed by main code
@@ -348,14 +376,12 @@ def compare(pattern1, pattern2, plot, scale=True, scale_max=False, warning=None,
     p2 = data.GetPowderPatternObs()
 
     # If the two theta ranges do not match, check if they are commensurable
-    if not np.allclose(ttheta1,ttheta2):
-        # take smallest range
-        range1 = ttheta1.max()-ttheta1.min()
-        range2 = ttheta2.max()-ttheta2.min()
-        if range1 < range2:
-            ttheta2,p2 = make_commensurable(ttheta1,p1, ttheta2,p2)
-        else:
-            ttheta1,p1 = make_commensurable(ttheta2,p2, ttheta1,p1)
+    if not ttheta1.size==ttheta2.size or not np.allclose(ttheta1,ttheta2):
+        # take overlapping range
+        minimum = max(ttheta1.min(),ttheta2.min())
+        maximum = min(ttheta1.max(),ttheta2.max())
+        step = max(ttheta1[1]-ttheta1[0], ttheta2[1]-ttheta2[0])
+        ttheta1,p1,ttheta2,p2 = make_commensurable(ttheta1,p1,ttheta2,p2,minimum,maximum,step)
 
     # Calculate scale factor (p2 is reference)
     if scale:
