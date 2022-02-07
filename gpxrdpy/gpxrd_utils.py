@@ -249,6 +249,20 @@ def plot_data(ttheta,p1,p2,plot,label1='calc',label2='observed',vlines=None,delt
         pt.savefig(path+'.pdf',bbox_inches='tight')
     pt.close()
 
+def make_commensurable(ttheta_ref,p_ref, ttheta,p):
+    ttheta_commensurate = np.zeros_like(ttheta_ref)
+    p_commensurate = np.zeros_like(p_ref)
+
+    for n,t in enumerate(ttheta_ref):
+        index = np.argmin(np.abs(ttheta-t))
+        ttheta_commensurate[n] = ttheta[index]
+        p_commensurate[n] = p[index]
+
+    if not np.allclose(ttheta_ref,ttheta_commensurate):
+        warnings.warn('Tried to make the two theta ranges commensurate, but they still differ!')
+
+    return ttheta_commensurate,p_commensurate
+
 ##########################################
 # Actual functions that are executed by main code
 
@@ -332,6 +346,16 @@ def compare(pattern1, pattern2, plot, scale=True, scale_max=False, warning=None,
     data.ImportPowderPattern2ThetaObs(pattern2,ind) # skip no lines
     ttheta2 = data.GetPowderPatternX()
     p2 = data.GetPowderPatternObs()
+
+    # If the two theta ranges do not match, check if they are commensurable
+    if not np.allclose(ttheta1,ttheta2):
+        # take smallest range
+        range1 = ttheta1.max()-ttheta1.min()
+        range2 = ttheta2.max()-ttheta2.min()
+        if range1 < range2:
+            ttheta2,p2 = make_commensurable(ttheta1,p1, ttheta2,p2)
+        else:
+            ttheta1,p1 = make_commensurable(ttheta2,p2, ttheta1,p1)
 
     # Calculate scale factor (p2 is reference)
     if scale:
