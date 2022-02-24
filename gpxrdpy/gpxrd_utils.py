@@ -301,6 +301,9 @@ def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks):
 
     data = pyobjcryst.powderpattern.PowderPattern()
     data.SetWavelength(wavelength)
+    if neutron:
+        data.SetRadiationType(pyobjcryst.general.RadiationType.RAD_NEUTRON)
+
     data.ImportPowderPattern2ThetaObs(pattern,0) # skip no lines
     ttheta = data.GetPowderPatternX()
     iobs = data.GetPowderPatternObs()
@@ -308,7 +311,6 @@ def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks):
     # Create diffraction data, set crystal and input parameters for diffraction data
     diffData = data.AddPowderPatternDiffraction(crystal)
     diffData.SetReflectionProfilePar(pyobjcryst.powderpattern.ReflectionProfileType.PROFILE_PSEUDO_VOIGT,peakwidth * peakwidth)
-    data.Prepare()
     icalc = data.GetPowderPatternCalc()
 
     # Check whether the largest peak of omitted 2theta range is at least as large as the largest peak of the observed 2theta range divided by PEAK_FACTOR
@@ -319,7 +321,6 @@ def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks):
         step = np.round((ttheta[1]-ttheta[0])/deg,3)
         full_ttheta = np.arange(0, max(ttheta/deg)+step, step)*deg
         data.SetPowderPatternX(full_ttheta)
-        data.Prepare() # prepare for calcs, generate hkl space
         full_t1 = data.GetPowderPatternCalc()
         if np.any(full_ttheta<min(ttheta)) and max(full_t1[full_ttheta<min(ttheta)]) > max(icalc)/PEAK_FACTOR:
             warnings.warn("There is a significant diffraction peak in the omitted 2theta range! Statistical comparison can give biased results.", UserWarning)
@@ -328,13 +329,15 @@ def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks):
     return ttheta,iobs,icalc,warning,full_ttheta,full_t1
 
 
-def calculate_patterns(crystals, wavelength, peakwidth, pattern, check_peaks):
+def calculate_patterns(crystals, wavelength, peakwidth, pattern, check_peaks, neutron):
     # Basic argument check
     if (wavelength < 1.e-6):
         print("Warning: Wavelength is too small. A crash may be iminent.\n")
 
     data = pyobjcryst.powderpattern.PowderPattern()
     data.SetWavelength(wavelength)
+    if neutron:
+        data.SetRadiationType(pyobjcryst.general.RadiationType.RAD_NEUTRON)
     data.ImportPowderPattern2ThetaObs(pattern,0) # skip no lines
     ttheta = data.GetPowderPatternX()
     p = data.GetPowderPatternObs()
@@ -343,13 +346,14 @@ def calculate_patterns(crystals, wavelength, peakwidth, pattern, check_peaks):
     for n,crystal in enumerate(crystals):
         data = pyobjcryst.powderpattern.PowderPattern()
         data.SetWavelength(wavelength)
+        if neutron:
+            data.SetRadiationType(pyobjcryst.powderpattern.RadiationType.RAD_NEUTRON)
         data.ImportPowderPattern2ThetaObs(pattern,0) # skip no lines
         ttheta = data.GetPowderPatternX()
 
         # Create diffraction data, set crystal and input parameters for diffraction data
         diffData = data.AddPowderPatternDiffraction(crystal)
         diffData.SetReflectionProfilePar(pyobjcryst.powderpattern.ReflectionProfileType.PROFILE_PSEUDO_VOIGT,peakwidth * peakwidth)
-        data.Prepare()
         patterns[n] = data.GetPowderPatternCalc()
 
     return ttheta,p,patterns
@@ -455,19 +459,18 @@ def background(pattern, peakwidth, bkg_points, locs, bkg_range, uniform, plot):
             f.write("{:4.3f}\t{:10.8f}\n".format(ttheta[i]/deg,no_bg[i]))
 
 
-def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail):
+def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail, neutron):
     data = pyobjcryst.powderpattern.PowderPattern()
 
     # Basic argument check
     if (wavelength < 1.e-6):
         print("Warning: Wavelength is too small. A crash may be iminent.\n")
 
-    # Create diffraction data, set crystal and input parameters for diffraction data
-    diffData = data.AddPowderPatternDiffraction(crystal)
-    diffData.SetReflectionProfilePar(pyobjcryst.powderpattern.ReflectionProfileType.PROFILE_PSEUDO_VOIGT,peakwidth * peakwidth)
-
     # Set input parameters for pxrd
     data.SetWavelength(wavelength)
+
+    if neutron:
+        data.SetRadiationType(pyobjcryst.general.RadiationType.RAD_NEUTRON)
 
     # Add the observed data
     if obspattern is None:
@@ -476,7 +479,9 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
     else:
         data.ImportPowderPattern2ThetaObs(obspattern,0) # skip no lines
 
-    data.Prepare() # prepare for calcs, generate hkl space
+    # Create diffraction data, set crystal and input parameters for diffraction data
+    diffData = data.AddPowderPatternDiffraction(crystal)
+    diffData.SetReflectionProfilePar(pyobjcryst.powderpattern.ReflectionProfileType.PROFILE_PSEUDO_VOIGT,peakwidth * peakwidth)
 
     # Calculate initial scale factor
     if obspattern is not None:
@@ -507,7 +512,6 @@ def calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, ob
             step = np.round((ttheta[1]-ttheta[0])/deg,3)
             full_ttheta = np.arange(0, max(ttheta/deg)+step, step)*deg
             data.SetPowderPatternX(full_ttheta)
-            data.Prepare() # prepare for calcs, generate hkl space
             full_t1 = data.GetPowderPatternCalc()*scalefactor
             if max(full_t1[full_ttheta<min(ttheta)]) > max(icalc)/PEAK_FACTOR:
                 warnings.warn("There is a significant diffraction peak in the omitted 2theta range! Statistical comparison can give biased results.", UserWarning)

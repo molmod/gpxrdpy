@@ -41,6 +41,8 @@ if __name__ == "__main__":
                   action="store_false", dest="check_peaks", help="check whether there are significant peaks outside the obspattern range [default: %default]", default=True)
         parser.add_option("--detail",
                   action="store_true", dest="detail", help="print detailed Fhkl info per hkl [default: %default]", default=False)
+        parser.add_option("--neutron",
+                  action="store_true", dest="neutron", help="use a neutron radiation type [default: %default]", default=False)
 
         (options, args) = parser.parse_args(sys.argv[2:])
 
@@ -63,10 +65,11 @@ if __name__ == "__main__":
         plot        = options.plot
         check_peaks = options.check_peaks
         detail      = options.detail
+        neutron     = options.neutron
 
         # Calculate the PXRD pattern and save the output
         crystal = create_crystal(filename)
-        calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail)
+        calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail, neutron)
 
 
     # Comp mode
@@ -212,6 +215,8 @@ if __name__ == "__main__":
                   action="store", type="float", dest="peakwidth", help="set peak width (degrees) [default: %default]", default=0.14)
         parser.add_option("--check_peaks",
                   action="store_false", dest="check_peaks", help="check whether there are significant peaks outside the obspattern range [default: %default]", default=True)
+        parser.add_option("--neutron",
+                  action="store_true", dest="neutron", help="use a neutron radiation type [default: %default]", default=False)
 
         (options, args) = parser.parse_args(sys.argv[2:])
 
@@ -223,6 +228,7 @@ if __name__ == "__main__":
         wavelength  = options.wavelength
         peakwidth   = options.peakwidth * deg
         check_peaks = options.check_peaks
+        neutron     = options.neutron
 
         try:
             os.mkdir('frames')
@@ -233,7 +239,7 @@ if __name__ == "__main__":
         crystal = create_crystals([idx])[0]
 
         # Calculate patterns
-        ttheta, iobs, icalc, warning, fttheta, ficalc = calculate_pattern(crystal, wavelength, peakwidth, obspattern, check_peaks)
+        ttheta, iobs, icalc, warning, fttheta, ficalc = calculate_pattern(crystal, wavelength, peakwidth, obspattern, check_peaks, neutron)
         # Do not scale the patterns, only scale the fully averaged one
         #ficalc = ficalc * iobs.max()/icalc.max()
         #icalc = icalc * iobs.max()/icalc.max()
