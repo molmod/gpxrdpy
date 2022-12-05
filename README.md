@@ -13,9 +13,11 @@ Usage:
 Warning: the `average` mode is deprecated in favor of the included gpxrd_average.sh script, as the current backend suffers from some kind of memory error. <br>
 Usage:
 
-`gpxrd_average.sh file.h5 no_snapshots`
+`gpxrd_average.sh file.h5 nr_snapshots`
 
 The default values for the `run_up_time` and `exp_filename` should be altered within this bash script before execution.
+
+A version of gpxrdpy is also implemented in pyiron at https://github.com/SanderBorgmans/pyiron/tree/hpc_ugent_2020.
 
 ## Requirements
 * `pyobjcryst` - Python bindings to ObjCryst++, the Object-Oriented Crystallographic Library (see https://github.com/diffpy/pyobjcryst)
