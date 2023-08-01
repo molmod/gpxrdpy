@@ -294,7 +294,7 @@ def make_commensurable(ttheta1,p1,ttheta2,p2,minimum,maximum,step):
 ##########################################
 # Actual functions that are executed by main code
 
-def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks):
+def calculate_pattern(crystal, wavelength, peakwidth, pattern, check_peaks, neutron):
     # Basic argument check
     if (wavelength < 1.e-6):
         print("Warning: Wavelength is too small. A crash may be iminent.\n")

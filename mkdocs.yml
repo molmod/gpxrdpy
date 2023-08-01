@@ -1,0 +1,40 @@
+site_name: gpxrdpy
+theme:
+  name: material
+  palette:
+    primary: amber
+    accent: amber
+  logo: gpxrdpy.svg
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - navigation.sections
+    - toc.integrate
+
+  nav:
+  - Home: index.md
+  - Example: notebook.ipynb
+
+
+  hide:
+  - toc
+
+  plugins:
+    - mkdocs-jupyter
+
+  repo_url: https://github.com/SanderBorgmans/gpxrdpy
+  markdown_extensions:
+    - md_in_html
+    - admonition
+    - footnotes
+    - pymdownx.highlight:
+        anchor_linenums: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences
+    - pymdownx.details
+    - pymdownx.arithmatex:
+        generic: true
