@@ -1,5 +1,5 @@
-
-![gpxrdpy](./docs/gpxrdpy.svg)
+![gpxrdpy](./docs/gpxrdpy_banner_light.svg#gh-light-mode-only)
+![gpxrdpy](./docs/gpxrdpy_banner_dark.svg#gh-dark-mode-only)
 
 # gpxrdpy
 Python wrapper for PXRD pattern calculation based on pyobjcryst. There are four main usages:
