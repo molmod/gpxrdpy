@@ -26,7 +26,7 @@ def check_calculation():
     numpoints   = 1000
     max2theta   = 50 * deg
     obspattern  = obspattern
-    plot        = False
+    plot        = 'False'
     check_peaks = False
     detail      = False # do not print detailed info for each peak
     neutron     = False
