@@ -11,9 +11,10 @@ def check_import():
         print('Could not import gpxrdpy module')
 
 def check_calculation():
+    import gpxrdpy
     from gpxrdpy.gpxrd_utils import create_crystal, calculate
 
-    data_path = os.path.join(os.path.dirname(__file__), 'data')
+    data_path = os.path.join(gpxrdpy.__path__[0], 'data')
     filename = os.path.join(data_path,'COF-5.cif')
     obspattern = os.path.join(data_path,'exp.tsv')
 
@@ -32,21 +33,23 @@ def check_calculation():
 
     try:
         crystal = create_crystal(filename)
-    except:
+    except Exception as e:
         print('Crystal creation failed')
+        print(e)
         return
     
     try:
         calculate(filename, crystal, wavelength, peakwidth, numpoints, max2theta, obspattern, plot, check_peaks, detail, neutron)
-    except:
+    except Exception as e:
         print('PXRD calculation failed')
+        print(e)
         return
 
     # Check whether correct files are created
-    assert os.path.exists('tests/data/COF-5.dat')
-    assert os.path.exists('tests/data/COF-5_fhkl.dat')
-    assert os.path.exists('tests/data/COF-5_q.dat')
-    assert os.path.exists('tests/data/xrd.pdf')
+    assert os.path.exists(os.path.join(data_path,'COF-5_fhkl.dat'))
+    assert os.path.exists(os.path.join(data_path,'COF-5.dat'))
+    assert os.path.exists(os.path.join(data_path,'COF-5_q.dat'))
+    assert os.path.exists(os.path.join(data_path,'xrd.pdf'))
 
 if __name__ == "__main__":
     print("Testing your gpxrdpy installation...")
