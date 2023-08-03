@@ -26,3 +26,5 @@ A version of gpxrdpy is also implemented in pyiron at https://github.com/SanderB
 * `numpy` - library for scientific computing in python
 * `scipy` - library for scientific computing in python
 * `molmod` - collection of molecular modelling tools for python (https://github.com/molmod/molmod)
+
+Additional installation instructions can be found in the [documentation](https://sanderborgmans.github.io/gpxrdpy/).
