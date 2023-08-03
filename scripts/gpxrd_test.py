@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import os
 
 deg = 0.017453292519943295 # conversion of rad to deg
 
@@ -24,7 +24,7 @@ def check_calculation():
     numpoints   = 1000
     max2theta   = 50 * deg
     obspattern  = obspattern
-    plot        = True
+    plot        = 'xrd'
     check_peaks = False
     detail      = False # do not print detailed info for each peak
     neutron     = False
@@ -42,7 +42,10 @@ def check_calculation():
         return
 
     # Check whether correct files are created
-
+    assert os.path.exists('tests/data/COF-5.dat')
+    assert os.path.exists('tests/data/COF-5_fhkl.dat')
+    assert os.path.exists('tests/data/COF-5_q.dat')
+    assert os.path.exists('tests/data/xrd.pdf')
 
 if __name__ == "__main__":
     print("Testing your gpxrdpy installation...")

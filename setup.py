@@ -7,7 +7,7 @@ setuptools.setup(
     description="PXRD pattern calculator based on pyobjcryst",
     url="https://github.com/SanderBorgmans/gpxrdpy",
     packages=setuptools.find_packages(),
-    scripts=['scripts/gpxrd.py', 'scripts/gpxrd_average.sh'],
+    scripts=['scripts/gpxrd.py', 'scripts/gpxrd_average.sh', 'scripts/gpxrd_test.py'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

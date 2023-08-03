@@ -31,6 +31,7 @@ A version of gpxrdpy is also implemented in pyiron found in the [ugent pyiron br
 
 ## Requirements
 * `pyobjcryst` - Python bindings to ObjCryst++, the Object-Oriented Crystallographic Library <br> (see [https://github.com/diffpy/pyobjcryst]())
-* `numpy` - library for scientific computing in python
+* `numpy` - library for computing in python
 * `scipy` - library for scientific computing in python
-* `molmod` - collection of molecular modelling tools for python <br> (see [https://github.com/molmod/molmod]())
+* `matplotlib` - library for plotting in python
+* `h5py` - library for storing data in python
