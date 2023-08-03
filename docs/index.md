@@ -5,9 +5,7 @@ hide:
 ---
 
 
-# gpxrd
-
-Python wrapper for PXRD pattern calculation based on pyobjcryst. There are four main usages:
+Python wrapper for PXRD pattern calculation based on [pyobjcryst](https://github.com/diffpy/pyobjcryst). There are four main usages:
 
 * calculate PXRD pattern based on cif file - `calc`
 * compare two PXRD patterns based on .tsv files - `comp`

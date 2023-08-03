@@ -4,8 +4,9 @@ import sys,h5py,os,glob
 from optparse import OptionParser
 import numpy as np
 
-from molmod.units import *
 from gpxrdpy.gpxrd_utils import *
+
+deg = 0.017453292519943295 # conversion of rad to deg
 
 
 if __name__ == "__main__":

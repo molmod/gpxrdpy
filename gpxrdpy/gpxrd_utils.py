@@ -8,7 +8,9 @@ import matplotlib.pyplot as pt
 from matplotlib.ticker import MaxNLocator
 from scipy.optimize import least_squares
 
-from molmod.units import *
+
+deg = 0.017453292519943295 # conversion of rad to deg
+angstrom = 1.889726133921252 # conversion of bohr radius (atomic units) to angstrom
 
 
 ##########################################
