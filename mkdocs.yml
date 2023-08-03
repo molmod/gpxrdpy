@@ -1,5 +1,6 @@
 site_name: GPXRDpy
 theme:
+  favicon: icon.svg
   name: material
   palette:
     primary: amber
