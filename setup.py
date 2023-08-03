@@ -13,5 +13,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    install_requires=['h5py>=2.0.0']
     python_requires='>=3.6',
 )

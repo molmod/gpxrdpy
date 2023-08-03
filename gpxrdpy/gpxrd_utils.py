@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import sys,os,copy,warnings,bisect
+import sys,os,warnings,bisect
 import numpy as np
 import pyobjcryst
 import matplotlib.pyplot as pt
