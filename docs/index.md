@@ -4,6 +4,7 @@ hide:
   - navigation
 ---
 
+![gpxrdpy](./gpxrdpy_banner_light.svg)
 
 Python wrapper for PXRD pattern calculation based on [pyobjcryst](https://github.com/diffpy/pyobjcryst). There are four main usages:
 
