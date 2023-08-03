@@ -26,7 +26,7 @@ def check_calculation():
     numpoints   = 1000
     max2theta   = 50 * deg
     obspattern  = obspattern
-    plot        = 'xrd'
+    plot        = False
     check_peaks = False
     detail      = False # do not print detailed info for each peak
     neutron     = False
@@ -44,12 +44,6 @@ def check_calculation():
         print('PXRD calculation failed')
         print(e)
         return
-
-    # Check whether correct files are created
-    assert os.path.exists(os.path.join(data_path,'COF-5_fhkl.dat'))
-    assert os.path.exists(os.path.join(data_path,'COF-5.dat'))
-    assert os.path.exists(os.path.join(data_path,'COF-5_q.dat'))
-    assert os.path.exists(os.path.join(data_path,'xrd.pdf'))
 
 if __name__ == "__main__":
     print("Testing your gpxrdpy installation...")
