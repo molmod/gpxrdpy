@@ -4,10 +4,10 @@
 <svg
    version="1.1"
    id="svg2"
-   width="1123.7067"
+   width="900"
    height="564.99536"
-   viewBox="0 0 1123.7067 564.99536"
-   sodipodi:docname="gpxrdpy_banner_dark.svg"
+   viewBox="0 0 900 564.99536"
+   sodipodi:docname="gpxrdpy_icon.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -25,7 +25,7 @@
   </defs>
   <sodipodi:namedview
      id="namedview4"
-     pagecolor="#000000"
+     pagecolor="#ffffff"
      bordercolor="#999999"
      borderopacity="1"
      inkscape:pageshadow="0"
@@ -8894,15 +8894,5 @@ AgQIECBAIGkBAUDS7Vc8AQIECBAgQIAAAQIECKQiIABIpdPqJECAAAECBAgQIECAAIGkBQQASbdf
        id="image10"
        x="-54.943539"
        y="7.7677341" />
-    <text
-       xml:space="preserve"
-       id="text3322"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:125%;font-family:'Linux Biolinum';-inkscape-font-specification:'Linux Biolinum';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;white-space:pre;shape-inside:url(#rect3324);fill:#ffffff;stroke:none;stroke-width:0.655978px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="matrix(1.5244413,0,0,1.5244413,-437.43157,-663.09104)"><tspan
-         x="740.58984"
-         y="833.72298"
-         id="tspan2916"><tspan
-   style="font-weight:bold"
-   id="tspan2914">GPXRD</tspan>py</tspan></text>
   </g>
 </svg>

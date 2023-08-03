@@ -1,10 +1,9 @@
-site_name: gpxrdpy
+site_name: GPXRDpy
 theme:
   name: material
   palette:
     primary: amber
-    accent: amber
-  logo: gpxrdpy.svg
+  logo: gpxrdpy_icon.svg
   features:
     - navigation.instant
     - navigation.tracking
