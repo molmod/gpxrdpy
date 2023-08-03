@@ -17,9 +17,6 @@ nav:
 - Introduction: index.md
 - Installation: installation.md
 
-hide:
-- toc
-
 repo_url: https://github.com/SanderBorgmans/gpxrdpy
 markdown_extensions:
   - md_in_html

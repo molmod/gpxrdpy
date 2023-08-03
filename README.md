@@ -1,7 +1,6 @@
 ![gpxrdpy](./docs/gpxrdpy_banner_light.svg#gh-light-mode-only)
 ![gpxrdpy](./docs/gpxrdpy_banner_dark.svg#gh-dark-mode-only)
 
-# gpxrdpy
 Python wrapper for PXRD pattern calculation based on pyobjcryst. There are four main usages:
 * calculate PXRD pattern based on cif file - `calc`
 * compare two PXRD patterns based on .tsv files - `comp`
@@ -20,7 +19,7 @@ Usage:
 
 The default values for the `run_up_time` and `exp_filename` should be altered within this bash script before execution.
 
-A version of gpxrdpy is also implemented in pyiron at https://github.com/SanderBorgmans/pyiron/tree/hpc_ugent_2020.
+A version of gpxrdpy is also implemented in pyiron at https://github.com/SanderBorgmans/pyiron/tree/hpc_ugent_2020. An example notebook, created as supporting information for [this paper](https://doi.org/10.1039/D3TA00470H), can be found in the notebooks folder. In this notebook, static and dynamic simulations are performed, and provided as input to the gpxrdpy module of pyiron. 
 
 ## Requirements
 * `pyobjcryst` - Python bindings to ObjCryst++, the Object-Oriented Crystallographic Library (see https://github.com/diffpy/pyobjcryst)
