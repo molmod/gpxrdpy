@@ -13,8 +13,9 @@ def check_import():
 def check_calculation():
     from gpxrdpy.gpxrd_utils import create_crystal, calculate
 
-    filename = 'tests/data/COF-5.cif'
-    obspattern = 'tests/data/exp.tsv'
+    data_path = os.path.join(os.path.dirname(__file__), 'data')
+    filename = os.path.join(data_path,'COF-5.cif')
+    obspattern = os.path.join(data_path,'exp.tsv')
 
     # Calculate the PXRD pattern and save the output
     # Also provide a reference pattern to perform a comparison analysis
