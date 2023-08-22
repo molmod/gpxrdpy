@@ -21,6 +21,9 @@ The default values for the `run_up_time` and `exp_filename` should be altered wi
 
 A version of gpxrdpy is also implemented in pyiron at https://github.com/SanderBorgmans/pyiron/tree/hpc_ugent_2020. An example notebook, created as supporting information for [this paper](https://doi.org/10.1039/D3TA00470H), can be found in the notebooks folder. In this notebook, static and dynamic simulations are performed, and provided as input to the gpxrdpy module of pyiron. 
 
+## How to cite 
+[1] S. Borgmans, S.M.J. Rogge, J.S. De Vos, C.V. Stevens, P. Van Der Voort, V. Van Speybroeck. Quantifying the Likelihood of Structural Models through a Dynamically Enhanced Powder X-Ray Diffraction Protocol. Angew. Chem. Int. Ed., 60, 16 (2021). https://doi.org/10.1002/anie.202017153
+
 ## Requirements
 * `pyobjcryst` - Python bindings to ObjCryst++, the Object-Oriented Crystallographic Library (see https://github.com/diffpy/pyobjcryst)
 * `numpy` - library for scientific computing in python
